@@ -1,0 +1,113 @@
+ul{
+    list-style-type: none;
+    margin:0;
+    padding:0;
+
+}
+ul li{
+    float:left;
+    padding:10px 10px 10px 10px;
+}
+.navbar
+{
+    margin:40px;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    padding:30px 60px 30px 60px;
+    border:solid black 2px
+    
+    
+}
+.title
+{
+      position: absolute;
+      left:80px;
+}
+
+ul{
+    position: absolute;
+    right:80px;
+    
+    
+}
+ul li:hover
+{
+   text-decoration: underline;
+}
+.container
+{
+    display:grid;
+    grid-template-columns: repeat(3,1fr);
+    gap:20px;
+    padding:10px;
+    
+    justify-content: space-around;
+}
+.container > div {
+    background-color: grey;
+    color: white;
+    height: 500px;
+    justify-content: center;
+    align-items:center;
+    text-align: center;
+    padding: 40px 0;
+    border-radius: 10px;
+}
+.image
+{
+
+display: inline;
+width:20px;
+height:30px;
+padding:20px;
+padding-top: 0px;
+}
+.image img{
+    width:350px;
+    height:300px;
+    
+}
+.description
+{
+    display:inline;
+    background-color: white;
+    color:black;
+
+}
+.banner-img img
+{
+    width:700px;
+    height:auto;
+    padding-left:450px;
+    padding-bottom:50px;
+}
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap');
+.banner-page {
+    display: flex;
+    padding:50px;
+    
+    gap: 10px;
+}
+.banner-text
+{
+    padding-bottom:250px;
+   
+
+}
+.banner-text h1{
+    font-size:50px;
+    
+}
+.banner-text button{
+    background-color:rgb(186, 180, 180);
+    border:none;
+    padding:12px;
+    border-radius: 15px;
+    color:black;
+    font-size:15px;
+    font-style: italic;
+}
+.banner-text button:hover{
+    background-color: rgb(240, 226, 226);
+}
