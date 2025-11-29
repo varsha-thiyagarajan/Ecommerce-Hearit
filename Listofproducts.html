@@ -24,13 +24,11 @@
     </nav>
     <div id="box"  class="container" ></div>
 </body>
-
 <script>
     fetch("http://localhost:5000/products")
         .then(res => res.json())
         .then(products => {
             console.log(products); // <-- check data coming
-
             let box = document.getElementById("box");
             products.forEach(p => {
                 box.innerHTML += ` <div class="product" style="height:auto">
@@ -40,7 +38,7 @@
             <h4>${p.description}
             </h4>
             <h3>${p.price}</h3>
-            <button>ADD TO CART</button>
+            <button onclick="">ADD TO CART</button>
         </div>
     </div>
 `;
