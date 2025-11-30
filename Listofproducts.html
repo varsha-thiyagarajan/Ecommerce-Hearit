@@ -13,11 +13,11 @@
           HearIt🎧
             </h1>
             <ul>
-                                <li onclick="window.location.href='index.html'">HOME</li>
+                <li onclick="window.location.href='index.html'">HOME</li>
                 <li>ABOUT</li>
                 <li onclick="window.location.href='ListofProducts.html'">PRODUCTS</li>
                 <li>CART</li>
-                <li>LOGIN/REGISTER</li>
+                 <li id="auth-btn">LOGIN/REGISTER</li>
             </ul>
         </div>
 
@@ -45,6 +45,26 @@
             });
         })
         .catch(err => console.error(err));
+function updateNavbar() {
+    let loggedIn = localStorage.getItem("loggedIn");
+
+    let navItem = document.getElementById("auth-btn");
+
+    if (loggedIn === "true") {
+        navItem.innerHTML = "LOGOUT";
+        navItem.onclick = () => logout();
+    } else {
+        navItem.innerHTML = "LOGIN/REGISTER";
+        navItem.onclick = () => window.location.href = "login.html";
+    }
+}
+
+function logout() {
+    localStorage.removeItem("loggedIn");
+    window.location.reload();
+}
+
+window.onload = updateNavbar;
 </script>
 
 </html>

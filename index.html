@@ -6,7 +6,6 @@
     <title>HOME PAGE</title>
 <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
     <nav >
         <div class="navbar" >
@@ -18,7 +17,8 @@
                 <li>ABOUT</li>
                 <li onclick="window.location.href='ListofProducts.html'">PRODUCTS</li>
                 <li>CART</li>
-                <li onclick="window.location.href='login.html'">LOGIN/REGISTER</li>
+                
+                 <li id="auth-btn">LOGIN/REGISTER</li>
             </ul>
         </div>
 
@@ -83,4 +83,27 @@
 </div>
 
 </body>
+<script>
+function updateNavbar() {
+    let loggedIn = localStorage.getItem("loggedIn");
+
+    let navItem = document.getElementById("auth-btn");
+
+    if (loggedIn === "true") {
+        navItem.innerHTML = "LOGOUT";
+        navItem.onclick = () => logout();
+    } else {
+        navItem.innerHTML = "LOGIN/REGISTER";
+        navItem.onclick = () => window.location.href = "login.html";
+    }
+}
+
+function logout() {
+    localStorage.removeItem("loggedIn");
+    window.location.reload();
+}
+
+window.onload = updateNavbar;
+</script>
+
 </html>

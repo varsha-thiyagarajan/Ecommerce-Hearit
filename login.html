@@ -4,19 +4,62 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login page</title>
+<link rel="stylesheet" href="styles.css">
 </head>
+<style>
+    #center
+    {
+         display:flex;
+         flex-direction: column;
+         justify-content: center;
+         align-items: center;
+         background-color: rgb(211, 171, 178);
+         color:black;
+         padding:50px;
+         margin:140px;
+         width:450px;
+         margin-left:500px
+
+    }
+    #center button{
+        background-color: darkblue;
+        padding:5px;
+        border-radius: 5px;
+        margin:10px;
+        margin-left:100px;
+        color:white
+    }
+</style>
+
 <body>
-    <div>
-        <h1>Login</h1>
+     <nav >
+        <div class="navbar" >
+            <h1 class="title">
+          HearIt🎧
+            </h1>
+            <ul>
+
+                <li>ABOUT</li>
+                <li onclick="window.location.href='ListofProducts.html'">PRODUCTS</li>
+                <li>CART</li>
+                
+            </ul>
+        </div>
+
+    </nav>
+    <div  id="center">
+        <h3>LOGIN</h3>
         <form>
             <label>Email:</label>
             <input type="email" class="email"><br><br>
             <label>Password:</label>
             <input type="password" class="password"><br><br>
-            <button type="button" onclick="login()">SUBMIT</button>
+            <button type="button" onclick="login()">LOGIN</button>
+            
         </form>
+         <div class="msg">Don't have an account <a href="register.html">Signin</a></div>
     </div>
-    <div class="msg"></div>
+   
 </body>
 <script>
     async function login()
@@ -41,6 +84,16 @@
     {
         msg.innerHTML+=`<h3>Login Failed User is not Found Please Register</h3>
         <button onclick="window.location.href='register.html'">Register</button>`
+    }
+    else if (data.msg === "login successful") {
+        localStorage.setItem("loggedIn", "true");
+        msg.innerHTML = `<h3 style="color:green">Registration Successful! Redirecting...</h3>`;
+        setTimeout(() => {
+            window.location.href = "index.html";
+        }, 1500);
+    }
+    else {
+        msg.innerHTML = `<h3 style="color:red">Something went wrong</h3>`;
     }
     }
     

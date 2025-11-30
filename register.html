@@ -3,9 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>REGISTER</title>
+<link rel="stylesheet" href="styles.css">
 </head>
+<style>
+    #center
+    {
+         display:flex;
+         flex-direction: column;
+         justify-content: center;
+         align-items: center;
+         background-color: rgb(211, 171, 178);
+         color:black;
+         padding:50px;
+         margin:140px;
+         width:450px;
+         margin-left:500px
+
+    }
+    #center button{
+        background-color: darkblue;
+        padding:5px;
+        border-radius: 5px;
+        margin:10px;
+        margin-left:100px;
+        color:white
+    }
+</style>
+
 <body>
-    Register Page
+     <nav >
+        <div class="navbar" >
+            <h1 class="title">
+          HearIt🎧
+            </h1>
+            <ul>
+
+                <li>ABOUT</li>
+                <li onclick="window.location.href='ListofProducts.html'">PRODUCTS</li>
+                <li>CART</li>
+               
+            </ul>
+        </div>
+
+    </nav>
+    <div  id="center">
+        <h3>REGISTER</h3>
+        <form>
+            <label>User:</label>
+             <input type="name" class="name"><br><br>
+            <label>Email:</label>
+            <input type="email" class="email"><br><br>
+            <label>Password:</label>
+            <input type="password" class="password"><br><br>
+            <button type="button" onclick="register()">REGISTER</button>
+            
+        </form>
+         <div class="msg">Already have an account <a href="login.html">Login</a></div>
+    </div>
+   
 </body>
+<script>
+    async function register()
+    {
+    const Name=document.getElementsByClassName('name')[0].value
+    const Email=document.getElementsByClassName('email')[0].value
+    const Password=document.getElementsByClassName('password')[0].value
+    const response=await fetch("http://localhost:5000/register",{
+        method:"POST",
+        headers:{
+            "Content-Type": "application/json"
+        },
+        body:JSON.stringify({
+            name:Name,
+            email:Email,
+            password:Password
+        })
+    })
+    const data=await response.json()
+    console.log(data)
+    const msg=document.getElementsByClassName('msg')[0]
+     if (data.msg === "User already found") {
+        msg.innerHTML = `<h3 style="color:red">Email already exists! Please login.</h3>
+        <button onclick="window.location.href='login.html'">Login</button>`;
+    }
+    else if (data.msg === "Register successfull") {
+        localStorage.setItem("loggedIn", "true");
+        msg.innerHTML = `<h3 style="color:green">Registration Successful! Redirecting...</h3>`;
+        setTimeout(() => {
+            window.location.href = "index.html";
+        }, 1500);
+    }
+    else {
+        msg.innerHTML = `<h3 style="color:red">Something went wrong</h3>`;
+    }
+    }
+    
+</script>
 </html>
