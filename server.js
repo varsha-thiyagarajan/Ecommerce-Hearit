@@ -4,7 +4,7 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const Product = require("./models/products");
 const User=require("./models/user");
-
+const Cart=require("./models/cart")
 dotenv.config();
 connectdb();
 
@@ -30,6 +30,7 @@ app.post('/login',async(req,res)=>
   }
 
 res.json({
+  email:email,
   msg:"login successful"
 })
 })
@@ -49,10 +50,31 @@ app.post('/register',async(req,res)=>
   }).save()
   if (newUser)
   {
-    return res.json({msg:"Register successfull"})
+    return res.json({
+      email:email,msg:"Register successfull"})
   }
  return res.json({ msg: "Something went wrong" });
 })
+app.post('/cart',async(req,res)=>
+{
+  const{productId,email,name,description,price}=req.body
+  const newcart=await Cart({
+    productId,
+   email,
+    name,
+   description,
+   price
+  }).save()
+  if (newcart)
+  {
+    return res.json({name:newcart.name,msg:"Added to Cart"})
+  }
+})
+app.get('/cartpage/:email', async (req, res) => {
+    const email = req.params.email;
+    const products = await Cart.find({ email });
+    res.json(products);
+});
 app.listen(5000, () => {
   console.log("Server running on port 5000");
 });

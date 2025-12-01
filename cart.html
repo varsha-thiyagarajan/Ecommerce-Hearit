@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CART</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav>
+        <div class="navbar">
+            <h1 class="title">HearIt🎧</h1>
+            <ul>
+                <li onclick="window.location.href='index.html'">HOME</li>
+                <li>ABOUT</li>
+                <li onclick="window.location.href='ListofProducts.html'">PRODUCTS</li>
+                <li>CART</li>
+                <li id="auth-btn">LOGIN/REGISTER</li>
+            </ul>
+        </div>
+    </nav>
+
+    <div id="box" class="container"></div>
+</body>
+<script>
+fetch("http://localhost:5000/cartpage")
+        .then(res => res.json())
+        .then(products => {
+            let box = document.getElementById("box");
+            products.forEach(p => {
+                box.innerHTML += `
+                <div class="product" style="height:auto">
+                    <div class="description">
+
+                        <h3>${p.name}</h3>
+                        <h4>${p.description}</h4>
+                        <h3>₹${p.price}</h3>
+            
+                    </div>
+                </div>`;
+            });
+        })
+        .catch(err => console.error(err));
+ function updateNavbar() {
+    let loggedIn = localStorage.getItem("loggedIn");
+
+    let navItem = document.getElementById("auth-btn");
+
+    if (loggedIn === "true") {
+        navItem.innerHTML = "LOGOUT";
+        navItem.onclick = () => logout();
+    } else {
+        navItem.innerHTML = "LOGIN/REGISTER";
+        navItem.onclick = () => window.location.href = "login.html";
+    }
+}
+
+function logout() {
+    localStorage.removeItem("loggedIn");
+    window.location.reload();
+}
+async function loadCart() {
+    const email = localStorage.getItem("email");
+
+    if (!email) {
+        alert("Please login first");
+        return;
+    }
+
+   const res = await fetch(`http://localhost:5000/cartpage/${email}`);
+    const items = await res.json();
+
+    console.log(items);
+}
+ window.onload = () => {
+        updateNavbar();
+        loadCart();
+    };
+</script>
+</html>

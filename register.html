@@ -89,6 +89,7 @@
     }
     else if (data.msg === "Register successfull") {
         localStorage.setItem("loggedIn", "true");
+        localStorage.setItem("email", data.email)
         msg.innerHTML = `<h3 style="color:green">Registration Successful! Redirecting...</h3>`;
         setTimeout(() => {
             window.location.href = "index.html";

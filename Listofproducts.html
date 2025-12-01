@@ -7,64 +7,89 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <nav >
-        <div class="navbar" >
-            <h1 class="title">
-          HearIt🎧
-            </h1>
+    <nav>
+        <div class="navbar">
+            <h1 class="title">HearIt🎧</h1>
             <ul>
                 <li onclick="window.location.href='index.html'">HOME</li>
                 <li>ABOUT</li>
                 <li onclick="window.location.href='ListofProducts.html'">PRODUCTS</li>
                 <li>CART</li>
-                 <li id="auth-btn">LOGIN/REGISTER</li>
+                <li id="auth-btn">LOGIN/REGISTER</li>
             </ul>
         </div>
-
     </nav>
-    <div id="box"  class="container" ></div>
+
+    <div id="box" class="container"></div>
 </body>
+
 <script>
+    // FETCH PRODUCTS FROM BACKEND
     fetch("http://localhost:5000/products")
         .then(res => res.json())
         .then(products => {
-            console.log(products); // <-- check data coming
             let box = document.getElementById("box");
+
             products.forEach(p => {
-                box.innerHTML += ` <div class="product" style="height:auto">
-    
-        <div class="description" >
-            <h3>${p.name}</h3>
-            <h4>${p.description}
-            </h4>
-            <h3>${p.price}</h3>
-            <button onclick="">ADD TO CART</button>
-        </div>
-    </div>
-`;
+                box.innerHTML += `
+                <div class="product" style="height:auto">
+                    <div class="description">
+                        <h3>${p.name}</h3>
+                        <h4>${p.description}</h4>
+                        <h3>₹${p.price}</h3>
+                        <button onclick="addtocart('${p._id}','${p.name}','${p.description}',${p.price})">
+                            ADD TO CART
+                        </button>
+                    </div>
+                </div>`;
             });
         })
         .catch(err => console.error(err));
-function updateNavbar() {
-    let loggedIn = localStorage.getItem("loggedIn");
+    function updateNavbar() {
+        let loggedIn = localStorage.getItem("loggedIn");
+        let navItem = document.getElementById("auth-btn");
 
-    let navItem = document.getElementById("auth-btn");
-
-    if (loggedIn === "true") {
-        navItem.innerHTML = "LOGOUT";
-        navItem.onclick = () => logout();
-    } else {
-        navItem.innerHTML = "LOGIN/REGISTER";
-        navItem.onclick = () => window.location.href = "login.html";
+        if (loggedIn === "true") {
+            navItem.innerHTML = "LOGOUT";
+            navItem.onclick = () => logout();
+        } else {
+            navItem.innerHTML = "LOGIN/REGISTER";
+            navItem.onclick = () => window.location.href = "login.html";
+        }
     }
-}
 
-function logout() {
-    localStorage.removeItem("loggedIn");
-    window.location.reload();
-}
+    function logout() {
+        localStorage.removeItem("loggedIn");
+        localStorage.removeItem("email");
+        window.location.reload();
+    }
+    async function addtocart(productId, name, description, price) {
+        const email = localStorage.getItem("email");
 
-window.onload = updateNavbar;
+        if (!email) {
+            alert("Please Login First!..");
+            return;
+        }
+
+        const cartItem = {
+            productId,
+            email,
+            name,
+            description,
+            price
+        };
+
+        const res = await fetch("http://localhost:5000/cart", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(cartItem)
+        });
+
+        const data = await res.json();
+        alert(data.msg);
+    }
+
+    window.onload = updateNavbar;
 </script>
 
 </html>
