@@ -75,6 +75,16 @@ app.get('/cartpage/:email', async (req, res) => {
     const products = await Cart.find({ email });
     res.json(products);
 });
+app.delete('/cart/:id', async (req, res) => {
+    const id = req.params.id;
+
+    const deleted = await Cart.findByIdAndDelete(id);
+
+    if (deleted) {
+        return res.json({ msg: "Item removed from cart" });
+    }
+    return res.json({ msg: "Item not found" });
+});
 app.listen(5000, () => {
   console.log("Server running on port 5000");
 });

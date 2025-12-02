@@ -21,29 +21,12 @@
     </nav>
 
     <div id="box" class="container"></div>
+    <div id="total" style="margin: 20px; font-size: 22px; font-weight: bold;"></div>
 </body>
+
 <script>
-fetch("http://localhost:5000/cartpage")
-        .then(res => res.json())
-        .then(products => {
-            let box = document.getElementById("box");
-            products.forEach(p => {
-                box.innerHTML += `
-                <div class="product" style="height:auto">
-                    <div class="description">
-
-                        <h3>${p.name}</h3>
-                        <h4>${p.description}</h4>
-                        <h3>₹${p.price}</h3>
-            
-                    </div>
-                </div>`;
-            });
-        })
-        .catch(err => console.error(err));
- function updateNavbar() {
+function updateNavbar() {
     let loggedIn = localStorage.getItem("loggedIn");
-
     let navItem = document.getElementById("auth-btn");
 
     if (loggedIn === "true") {
@@ -57,8 +40,10 @@ fetch("http://localhost:5000/cartpage")
 
 function logout() {
     localStorage.removeItem("loggedIn");
+    localStorage.removeItem("email");
     window.location.reload();
 }
+
 async function loadCart() {
     const email = localStorage.getItem("email");
 
@@ -67,14 +52,51 @@ async function loadCart() {
         return;
     }
 
-   const res = await fetch(`http://localhost:5000/cartpage/${email}`);
+    const res = await fetch(`http://localhost:5000/cartpage/${email}`);
     const items = await res.json();
 
     console.log(items);
+   
+    let box = document.getElementById("box");
+    box.innerHTML = "";
+    let totalDiv = document.getElementById("total");
+    totalDiv.innerHTML=""
+    if (items.length === 0) {
+    box.innerHTML = "<center><h1>Your cart is empty</h1><center>";
+    return;   
 }
- window.onload = () => {
-        updateNavbar();
-        loadCart();
-    };
+let Totalprice=0
+    items.forEach(p => {
+        box.innerHTML += `
+            <div class="product" style="height:auto">
+                <div class="description">
+                    <h3>${p.name}</h3>
+                    <h4>${p.description}</h4>
+                    <h3>₹${p.price}</h3>
+                    <button onclick="deleteItem('${p._id}')">Delete</button>
+                </div>
+            </div>`;
+        Totalprice+=p.price
+    }
+    
+);
+totalDiv.innerHTML = `Total Price: ₹${Totalprice}`;
+}
+async function deleteItem(id) {
+    const res = await fetch(`http://localhost:5000/cart/${id}`, {
+        method: "DELETE"
+    });
+
+    const data = await res.json();
+    alert(data.msg);
+
+    loadCart(); 
+}
+
+window.onload = () => {
+    updateNavbar();
+    loadCart();
+};
 </script>
+
 </html>
